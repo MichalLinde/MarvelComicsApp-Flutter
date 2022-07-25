@@ -7,11 +7,11 @@ class ComicsRepository{
   final ApiClient _apiClient;
   ComicsRepository(this._apiClient);
 
-  Future<ComicDataWrapper> fetchComics(){
+  Future<ComicDataWrapper> fetchComics() async{
     return _apiClient.fetchComics(ConstantsApi.timeStamp, ConstantsApi.apiKey, ConstantsApi.hash());
   }
 
-  Future<ComicDataWrapper> searchComics(String searchText){
+  Future<ComicDataWrapper> searchComics(String searchText) async{
     return _apiClient.searchComics(searchText, ConstantsApi.timeStamp, ConstantsApi.apiKey, ConstantsApi.hash());
   }
 }
