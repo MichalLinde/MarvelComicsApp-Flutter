@@ -26,7 +26,7 @@ class Comic{
     if(json["urls"] != null){
       urls = [];
       json["urls"].forEach((v) {
-        urls!.add(Url.fromJson(v));
+        urls?.add(Url.fromJson(v));
       });
     }
     thumbnail = Thumbnail.fromJson(json["thumbnail"]);

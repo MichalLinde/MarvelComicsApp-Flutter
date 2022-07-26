@@ -82,22 +82,16 @@ class ListItemWidget extends StatelessWidget{
   String getAuthorText(Comic comic){
     bool writerFound = false;
 
-    if (comic.creators != null){
-      if (comic.creators!.items != null){
-        if (comic.creators!.items!.isEmpty){
-          return ListItemStrings.noAuthor;
-        } else{
-          for (CreatorSummary creator in comic.creators!.items!){
-            if (!writerFound){
-              if (creator.role! == "writer"){
-                writerFound = true;
-                return "${ListItemStrings.writtenBy} ${creator.name.toString()}";
-              }
-            }
+    if (comic.creators != null && comic.creators?.items != null && comic.creators?.items?.isNotEmpty == true){
+      for (CreatorSummary creator in comic.creators!.items!){
+        if (!writerFound){
+          if (creator.role! == "writer"){
+            writerFound = true;
+            return "${ListItemStrings.writtenBy} ${creator.name.toString()}";
           }
-          return "${ListItemStrings.createdBy} ${comic.creators!.items![0].name}";
         }
       }
+      return "${ListItemStrings.createdBy} ${comic.creators!.items![0].name}";
     }
     return ListItemStrings.noAuthor;
   }

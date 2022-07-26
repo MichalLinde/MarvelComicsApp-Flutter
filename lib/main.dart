@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
         title: "Marvel Comics",
         theme: ThemeData(primarySwatch: Colors.red),
+        debugShowCheckedModeBanner: false,
         routeInformationParser: Modular.routeInformationParser,
         routerDelegate: Modular.routerDelegate);
   }

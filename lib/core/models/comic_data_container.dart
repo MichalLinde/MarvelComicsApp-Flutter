@@ -23,7 +23,7 @@ class ComicDataContainer{
     if(json["results"] != null){
       results = [];
       json["results"].forEach((v) {
-        results!.add(Comic.fromJson(v));
+        results?.add(Comic.fromJson(v));
       });
     }
   }

@@ -60,14 +60,10 @@ class _HomePageState extends State<HomePage>{
         },
         child: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state){
-            if (state is HomeInitial) {
-            return LoadingWidget();
-            } else if (state is HomeLoading) {
+            if (state is HomeInitial || state is HomeLoading) {
             return LoadingWidget();
             } else if (state is HomeLoaded) {
             return _buildListItems(context, state.comics);
-            } else if (state is HomeError) {
-            return Container();
             } else {
             return Container();
             }

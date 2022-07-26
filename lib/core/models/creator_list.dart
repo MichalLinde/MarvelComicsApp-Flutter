@@ -20,7 +20,7 @@ class CreatorList {
     if(json["items"] != null){
       items = [];
       json["items"].forEach((v) {
-        items!.add(CreatorSummary.fromJson(v));
+        items?.add(CreatorSummary.fromJson(v));
       });
     }
   }
