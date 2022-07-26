@@ -5,6 +5,8 @@ import 'package:marvel_app/features/home_screen/cubits/home_cubit/home_cubit.dar
 import 'package:marvel_app/features/home_screen/cubits/home_cubit/home_state.dart';
 import 'package:marvel_app/features/home_screen/widgets/list_item_widget.dart';
 import 'package:marvel_app/features/home_screen/widgets/loading_widget.dart';
+import 'package:marvel_app/resources/dimens/home_page_dimens.dart';
+import 'package:marvel_app/resources/strings/home_page_strings.dart';
 
 import '../../core/models/comics_data_wrapper.dart';
 
@@ -19,8 +21,8 @@ class _HomePageState extends State<HomePage>{
 
   @override
   void initState(){
-    homeCubit.fetchComics();
     super.initState();
+    homeCubit.fetchComics();
   }
 
  @override
@@ -30,57 +32,66 @@ class _HomePageState extends State<HomePage>{
        backgroundColor: Colors.white,
        centerTitle: false,
        title: const Text(
-         "Marvel Comics",
+         HomePageStrings.appBarTitle,
          style: TextStyle(
            fontWeight: FontWeight.bold,
-           fontSize: 20.0,
+           fontSize: HomePageDimens.appBarTextSize,
            color: Colors.black,
          ),
        ),
      ),
      body: Padding(
-       padding: EdgeInsets.all(8.0),
+       padding: const EdgeInsets.all(HomePageDimens.aroundBodyPadding),
        child: _buildComicsList(),
      ),
    );
  }
 
  Widget _buildComicsList(){
-    return Container(
-      child: BlocProvider(
-        create: (_) => homeCubit,
-        child: BlocListener<HomeCubit, HomeState>(
-          listener: (context, state){
-            if (state is HomeError){
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message!)),
-              );
+    return BlocProvider(
+      create: (_) => homeCubit,
+      child: BlocListener<HomeCubit, HomeState>(
+        listener: (context, state){
+          if (state is HomeError){
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message ?? HomePageStrings.error)),
+            );
+          }
+        },
+        child: BlocBuilder<HomeCubit, HomeState>(
+          builder: (context, state){
+            if (state is HomeInitial) {
+            return LoadingWidget();
+            } else if (state is HomeLoading) {
+            return LoadingWidget();
+            } else if (state is HomeLoaded) {
+            return _buildListItems(context, state.comics);
+            } else if (state is HomeError) {
+            return Container();
+            } else {
+            return Container();
             }
           },
-          child: BlocBuilder<HomeCubit, HomeState>(
-            builder: (context, state){
-              if (state is HomeInitial) {
-              return LoadingWidget();
-              } else if (state is HomeLoading) {
-              return LoadingWidget();
-              } else if (state is HomeLoaded) {
-              return _buildListItems(context, state.comics);
-              } else if (state is HomeError) {
-              return Container();
-              } else {
-              return Container();
-              }
-            },
-          ),
         ),
       ),
     );
   }
 
   Widget _buildListItems(BuildContext context, ComicDataWrapper comics){
-    return ListView.builder(
-      itemCount: comics.data!.results!.length,
-      itemBuilder: (context, index) => ListItemWidget(comic: comics.data!.results![index],)
-    );
+
+    if (comics.data != null){
+      if (comics.data!.results != null){
+        return ListView.builder(
+          itemCount: comics.data!.results!.length,
+          itemBuilder: (context, index) => ListItemWidget(comic: comics.data!.results![index],)
+        );
+      }
+    }
+    return _noDataWidget();
+  }
+
+  Widget _noDataWidget(){
+    return const Center(child: Text(HomePageStrings.noComics),);
   }
 }
+

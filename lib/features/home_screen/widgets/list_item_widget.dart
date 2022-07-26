@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marvel_app/core/models/creator_summary.dart';
+import 'package:marvel_app/resources/dimens/list_item_dimens.dart';
+import 'package:marvel_app/resources/strings/list_item_strings.dart';
 
 import '../../../core/models/comic.dart';
 
@@ -10,7 +12,7 @@ class ListItemWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return Container(
-      padding: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.all(ListItemDimens.paddingAround),
       child: Card(
         elevation: 5,
         child: Row(
@@ -18,52 +20,52 @@ class ListItemWidget extends StatelessWidget{
           mainAxisSize: MainAxisSize.max,
           children: [
             Container(
-              height: 200,
-              width: 140,
+              height: ListItemDimens.imageHeight,
+              width: ListItemDimens.imageWidth,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(ListItemDimens.imageCornerRadius),
                   image: DecorationImage(
                       fit: BoxFit.cover,
                       image: NetworkImage(
-                          comic.thumbnail!.getPath()
+                          getImageUrl(comic)
                       )
                   )
               ),
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(3.0),
+                padding: const EdgeInsets.all(ListItemDimens.aroundTextPadding),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    const SizedBox(height: 10,),
+                    const SizedBox(height: ListItemDimens.spaceBetweenTexts,),
                     Text(
-                      comic.title.toString(),
+                      comic.title ?? ListItemStrings.noTitle,
                       textAlign: TextAlign.left,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
+                        fontSize: ListItemDimens.titleSize,
                         color: Colors.black
                       ),
                     ),
-                    const SizedBox(height: 5.0,),
+                    const SizedBox(height: ListItemDimens.spaceBetweenTexts,),
                     Text(
                       getAuthorText(comic),
                       textAlign: TextAlign.left,
                       style: const TextStyle(
-                        fontSize: 12.0,
+                        fontSize: ListItemDimens.authorSize,
                         color: Color.fromRGBO(105, 105, 105, 1)
                       ),
                     ),
-                    const SizedBox(height: 5.0,),
+                    const SizedBox(height: ListItemDimens.spaceBetweenTexts,),
                     Text(
                       getDescriptionText(comic),
                       maxLines: 4,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
                       style: const TextStyle(
-                        fontSize: 14.0,
+                        fontSize: ListItemDimens.descriptionSize,
                         color: Colors.black
                       ),
                     )
@@ -79,26 +81,41 @@ class ListItemWidget extends StatelessWidget{
 
   String getAuthorText(Comic comic){
     bool writerFound = false;
-    if (comic.creators!.items!.isEmpty){
-      return "No author was given.";
-    } else{
-      for (CreatorSummary creator in comic.creators!.items!){
-        if (!writerFound){
-          if (creator.role! == "writer"){
-            writerFound = true;
-            return "Written by ${creator.name.toString()}";
+
+    if (comic.creators != null){
+      if (comic.creators!.items != null){
+        if (comic.creators!.items!.isEmpty){
+          return ListItemStrings.noAuthor;
+        } else{
+          for (CreatorSummary creator in comic.creators!.items!){
+            if (!writerFound){
+              if (creator.role! == "writer"){
+                writerFound = true;
+                return "${ListItemStrings.writtenBy} ${creator.name.toString()}";
+              }
+            }
           }
+          return "${ListItemStrings.createdBy} ${comic.creators!.items![0].name}";
         }
       }
-      return "Created by ${comic.creators!.items![0]}";
     }
+    return ListItemStrings.noAuthor;
   }
 
   String getDescriptionText(Comic comic){
     if (comic.description == null || comic.description == ""){
-      return "No description was given.";
+      return ListItemStrings.noDescription;
     } else{
       return comic.description.toString();
     }
+  }
+
+  String getImageUrl(Comic comic){
+    if (comic.thumbnail != null){
+      if (comic.thumbnail!.extension != null && comic.thumbnail!.path != null){
+        return comic.thumbnail!.getPath();
+      }
+    }
+    return ListItemStrings.noImageUrl;
   }
 }
