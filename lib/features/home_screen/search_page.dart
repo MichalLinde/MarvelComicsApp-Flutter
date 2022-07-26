@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:marvel_app/features/home_screen/cubits/search_cubit/search_cubit.dart';
 import 'package:marvel_app/features/home_screen/widgets/list_item_widget.dart';
 import 'package:marvel_app/features/home_screen/widgets/loading_widget.dart';
+import 'package:marvel_app/resources/custom_colors.dart';
 import 'package:marvel_app/resources/dimens/search_page_dimens.dart';
 import 'package:marvel_app/resources/strings/search_page_strings.dart';
 
@@ -19,7 +20,6 @@ class _SearchPageState extends State<SearchPage> {
   SearchCubit searchCubit = Modular.get<SearchCubit>();
   
   bool visibleText = false;
-  Color color = const Color.fromRGBO(169, 169, 169, 1);
   TextEditingController controller = TextEditingController();
 
   @override
@@ -28,12 +28,10 @@ class _SearchPageState extends State<SearchPage> {
     controller.addListener(() {
       if(controller.text.isNotEmpty) {
         setState(() {
-          color = const Color.fromRGBO(100, 100, 100, 1);
           visibleText = true;
         });
       } else {
         setState(() {
-          color = const Color.fromRGBO(169, 169, 169, 1);
           visibleText = false;
         });
       }
@@ -48,15 +46,12 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: Colors.white,
         actions: visibleText ? [
           TextButton(
-              onPressed: (){
-                controller.clear();
-                searchCubit.setInitial();
-              },
+              onPressed: () => cancelButtonPressed(),
               child: const Text(
                   SearchPageStrings.cancelButtonText,
                 style: TextStyle(
                   fontSize: SearchPageDimens.cancelButtonTextSize,
-                  color: Color.fromRGBO(169, 169, 169, 1)
+                  color: CustomColors.regularGrey
                 ),
               ))
         ] : null,
@@ -65,26 +60,20 @@ class _SearchPageState extends State<SearchPage> {
           child: TextField(
             textAlignVertical: TextAlignVertical.center,
             controller:controller ,
-            onChanged: (text) {
-              if (text.isNotEmpty){
-                searchCubit.searchComics(text);
-              } else {
-                searchCubit.setInitial();
-              }
-            },
+            onChanged: (text) => searchBarTextChanged(text),
             style: const TextStyle(
-              color: Color.fromRGBO(100, 100, 100, 1)
+              color: CustomColors.darkGrey
             ),
             decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.search,
-                color: color,
+                color: visibleText ? CustomColors.darkGrey : CustomColors.regularGrey,
               ),
               filled: true,
-              fillColor: const Color.fromRGBO(235, 236, 240, 1),
+              fillColor: CustomColors.lightGrey,
               hintText: SearchPageStrings.searchHint,
               hintStyle: const TextStyle(
-                color: Color.fromRGBO(169, 169, 169, 1)
+                color: CustomColors.regularGrey
               ),
               border: InputBorder.none,
             ),
@@ -150,7 +139,7 @@ class _SearchPageState extends State<SearchPage> {
       children: const [
         Icon(
           Icons.menu_book_rounded,
-          color: Color.fromRGBO(200, 200, 200, 1),
+          color: CustomColors.regularGrey,
           size: SearchPageDimens.infoIconSize,
         ),
         Text(
@@ -172,7 +161,7 @@ class _SearchPageState extends State<SearchPage> {
       children: const [
         Icon(
           Icons.close_rounded,
-          color: Color.fromRGBO(200, 200, 200, 1),
+          color: CustomColors.regularGrey,
           size: SearchPageDimens.infoIconSize,
         ),
         Text(
@@ -186,5 +175,18 @@ class _SearchPageState extends State<SearchPage> {
       ],
     )
     );
+  }
+
+  void cancelButtonPressed(){
+    controller.clear();
+    searchCubit.setInitial();
+  }
+
+  void searchBarTextChanged(String text){
+    if (text.isNotEmpty){
+      searchCubit.searchComics(text);
+    } else{
+      searchCubit.setInitial();
+    }
   }
 }
