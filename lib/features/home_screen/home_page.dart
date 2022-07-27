@@ -19,7 +19,6 @@ class HomePage extends StatefulWidget{
 class _HomePageState extends State<HomePage>{
 
   final HomeCubit homeCubit = Modular.get<HomeCubit>();
-  int currentIndex = 0;
 
   @override
   void initState(){
