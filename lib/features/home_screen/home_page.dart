@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:marvel_app/features/home_screen/cubits/home_cubit/home_cubit.dart';
 import 'package:marvel_app/features/home_screen/cubits/home_cubit/home_state.dart';
+import 'package:marvel_app/features/home_screen/widgets/bottom_nav_bar.dart';
 import 'package:marvel_app/features/home_screen/widgets/list_item_widget.dart';
 import 'package:marvel_app/features/home_screen/widgets/loading_widget.dart';
 import 'package:marvel_app/resources/dimens/home_page_dimens.dart';
@@ -22,7 +23,6 @@ class _HomePageState extends State<HomePage>{
   @override
   void initState(){
     super.initState();
-    homeCubit.fetchComics();
   }
 
  @override
@@ -44,12 +44,13 @@ class _HomePageState extends State<HomePage>{
        padding: const EdgeInsets.all(HomePageDimens.aroundBodyPadding),
        child: _buildComicsList(),
      ),
+     bottomNavigationBar: BottomNavBar(currentIndex: 0,)
    );
  }
 
  Widget _buildComicsList(){
-    return BlocProvider(
-      create: (_) => homeCubit,
+    return BlocProvider.value(
+      value: homeCubit,
       child: BlocListener<HomeCubit, HomeState>(
         listener: (context, state){
           if (state is HomeError){

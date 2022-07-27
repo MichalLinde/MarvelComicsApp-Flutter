@@ -12,13 +12,13 @@ class HomeModule extends Module{
   @override
   List<Bind> get binds => [
     Bind.factory((i) => ComicsRepository(i())),
-    Bind.factory((i) => HomeCubit(comicsRepository: i())),
-    Bind.factory((i) => SearchCubit(comicsRepository: i())),
+    Bind.singleton((i) => HomeCubit(comicsRepository: i())),
+    Bind.singleton((i) => SearchCubit(comicsRepository: i())),
   ];
 
   @override
   List<ModularRoute> get routes => [
-    ChildRoute("/home", child: (context, args) => HomePage()),
-    ChildRoute("/", child: (context, args) => SearchPage()),
+    ChildRoute("/", child: (context, args) => HomePage(), transition: TransitionType.fadeIn),
+    ChildRoute("/search", child: (context, args) => SearchPage(), transition: TransitionType.fadeIn),
   ];
 }
