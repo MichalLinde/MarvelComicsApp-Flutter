@@ -17,7 +17,10 @@ class SearchLoaded extends SearchState{
   const SearchLoaded(this.comics);
 }
 
-class SearchNotFound extends SearchState {}
+class SearchNotFound extends SearchState {
+  final String search;
+  const SearchNotFound(this.search);
+}
 
 class SearchError extends SearchState {
   final String? message;

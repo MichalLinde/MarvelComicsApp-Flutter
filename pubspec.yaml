@@ -41,6 +41,8 @@ dependencies:
   retrofit: ^3.0.1+1
   logger: ^1.0.0
   crypto: ^3.0.2
+  url_launcher: ^6.1.5
+  html: ^0.15.0
 
 dev_dependencies:
   flutter_test:
