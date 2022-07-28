@@ -115,7 +115,7 @@ class ListItemWidget extends StatelessWidget{
   String getImageUrl(Comic comic){
     if (comic.thumbnail != null){
       if (comic.thumbnail!.extension != null && comic.thumbnail!.path != null){
-        return comic.thumbnail!.getPath();
+        return "${comic.thumbnail!.path!}${comic.thumbnail!.extension!}";
       }
     }
     return ListItemStrings.noImageUrl;

@@ -1,18 +1,15 @@
-class Thumbnail {
-  String? path;
-  String? extension;
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+part 'thumbnail.freezed.dart';
+part 'thumbnail.g.dart';
 
-  Thumbnail({
-    this.path,
-    this.extension
-  });
+@freezed
+class Thumbnail with _$Thumbnail{
+  const factory Thumbnail({
+    String? path,
+    String? extension
+  }) = _Thumbnail;
 
-  Thumbnail.fromJson(Map<String, dynamic> json){
-    path = json["path"];
-    extension = json["extension"];
-  }
-
-  String getPath(){
-    return "$path.$extension";
-  }
+  factory Thumbnail.fromJson(Map<String, Object?> json)
+    => _$ThumbnailFromJson(json);
 }

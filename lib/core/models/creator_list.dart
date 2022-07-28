@@ -1,27 +1,19 @@
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'creator_summary.dart';
+part 'creator_list.freezed.dart';
+part 'creator_list.g.dart';
 
-class CreatorList {
-  int? available;
-  int? returned;
-  String? collectionURI;
-  List<CreatorSummary>? items;
+@freezed
+class CreatorList with _$CreatorList{
+  const factory CreatorList({
+    int? available,
+    int? returned,
+    String? collectionURI,
+    List<CreatorSummary>? items
+  }) = _CreatorList;
 
-  CreatorList({
-    this.available,
-    this.returned,
-    this.collectionURI,
-    this.items
-  });
-
-  CreatorList.fromJson(Map<String, dynamic> json){
-    available = json["available"];
-    returned = json["returned"];
-    collectionURI = json["collectionURI"];
-    if(json["items"] != null){
-      items = [];
-      json["items"].forEach((v) {
-        items?.add(CreatorSummary.fromJson(v));
-      });
-    }
-  }
+  factory CreatorList.fromJson(Map<String, Object?> json)
+    => _$CreatorListFromJson(json);
 }

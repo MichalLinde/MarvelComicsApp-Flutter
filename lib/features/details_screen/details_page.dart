@@ -212,7 +212,7 @@ class DetailsPage extends StatelessWidget{
 
   String getImageUrl(){
     if (comic.thumbnail != null && comic.thumbnail!.path != null && comic.thumbnail!.extension != null){
-      return comic.thumbnail!.getPath();
+      return "${comic.thumbnail!.path!}${comic.thumbnail!.extension!}";
     } else{
       return DetailsPageStrings.basicImageUrl;
     }

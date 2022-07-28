@@ -1,30 +1,20 @@
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'comic.dart';
+part 'comic_data_container.freezed.dart';
+part 'comic_data_container.g.dart';
 
-class ComicDataContainer{
-  int? offset;
-  int? limit;
-  int? total;
-  int? count;
-  List<Comic>? results;
+@freezed
+class ComicDataContainer with _$ComicDataContainer{
+  const factory ComicDataContainer({
+    int? offset,
+    int? limit,
+    int? total,
+    int? count,
+    List<Comic>? results
+  }) = _ComicDataContainer;
 
-  ComicDataContainer({
-    this.offset,
-    this.limit,
-    this.total,
-    this.count,
-    this.results
-  });
-
-  ComicDataContainer.fromJson(Map<String, dynamic> json){
-    offset = json["offset"];
-    limit = json["limit"];
-    total = json["total"];
-    count = json["count"];
-    if(json["results"] != null){
-      results = [];
-      json["results"].forEach((v) {
-        results?.add(Comic.fromJson(v));
-      });
-    }
-  }
+  factory ComicDataContainer.fromJson(Map<String, Object?> json)
+    => _$ComicDataContainerFromJson(json);
 }
