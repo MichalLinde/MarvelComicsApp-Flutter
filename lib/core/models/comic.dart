@@ -1,35 +1,22 @@
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:marvel_app/core/models/creator_list.dart';
 import 'package:marvel_app/core/models/thumbnail.dart';
 import 'package:marvel_app/core/models/url.dart';
+part 'comic.freezed.dart';
+part 'comic.g.dart';
 
-class Comic{
-  int? id;
-  String? title;
-  String? description;
-  List<Url>? urls;
-  Thumbnail? thumbnail;
-  CreatorList? creators;
+@freezed
+class Comic with _$Comic {
+  const factory Comic({
+    int? id,
+    String? title,
+    String? description,
+    List<Url>? urls,
+    Thumbnail? thumbnail,
+    CreatorList? creators
+  }) = _Comic;
 
-  Comic({
-    this.id,
-    this.title,
-    this.description,
-    this.urls,
-    this.thumbnail,
-    this.creators
-  });
-
-  Comic.fromJson(Map<String, dynamic> json){
-    id = json["id"];
-    title = json["title"];
-    description = json["description"];
-    if(json["urls"] != null){
-      urls = [];
-      json["urls"].forEach((v) {
-        urls?.add(Url.fromJson(v));
-      });
-    }
-    thumbnail = Thumbnail.fromJson(json["thumbnail"]);
-    creators = CreatorList.fromJson(json["creators"]);
-  }
+  factory Comic.fromJson(Map<String, Object?> json)
+    => _$ComicFromJson(json);
 }

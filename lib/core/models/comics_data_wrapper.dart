@@ -1,31 +1,22 @@
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'comic_data_container.dart';
+part 'comics_data_wrapper.freezed.dart';
+part 'comics_data_wrapper.g.dart';
 
-class ComicDataWrapper{
-  int? code;
-  String? status;
-  String? copyright;
-  String? attributionText;
-  String? attributionHTML;
-  ComicDataContainer? data;
-  String? etag;
+@freezed
+class ComicDataWrapper with _$ComicDataWrapper{
+  const factory ComicDataWrapper({
+    int? code,
+    String? status,
+    String? copyright,
+    String? attributionText,
+    String? attributionHTML,
+    ComicDataContainer? data,
+    String? etag,
+  }) = _ComicDataWrapper;
 
-  ComicDataWrapper({
-    this.code,
-    this.status,
-    this.copyright,
-    this.attributionText,
-    this.attributionHTML,
-    this.data,
-    this.etag
-  });
-
-  ComicDataWrapper.fromJson(Map<String, dynamic> json){
-    code = json["code"];
-    status = json["status"];
-    copyright = json["copyright"];
-    attributionText = json["attributionText"];
-    attributionHTML = json["attributionHTML"];
-    data = ComicDataContainer.fromJson(json["data"]);
-    etag = json["etag"];
-  }
+  factory ComicDataWrapper.fromJson(Map<String, Object?> json)
+    => _$ComicDataWrapperFromJson(json);
 }

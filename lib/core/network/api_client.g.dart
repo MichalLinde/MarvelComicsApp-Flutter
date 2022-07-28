@@ -33,7 +33,6 @@ class _ApiClient implements ApiClient {
                 .compose(_dio.options, 'comics',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    log("ApiClient ${_result.data}");
     final value = ComicDataWrapper.fromJson(_result.data!);
     return value;
   }
@@ -56,7 +55,6 @@ class _ApiClient implements ApiClient {
                 .compose(_dio.options, 'comics',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    log("ApiClient ${_result.data}");
     final value = ComicDataWrapper.fromJson(_result.data!);
     return value;
   }

@@ -1,17 +1,16 @@
-class CreatorSummary {
-  String? resourceURI;
-  String? name;
-  String? role;
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+part 'creator_summary.freezed.dart';
+part 'creator_summary.g.dart';
 
-  CreatorSummary({
-    this.resourceURI,
-    this.name,
-    this.role
-  });
+@freezed
+class CreatorSummary with _$CreatorSummary{
+  const factory CreatorSummary({
+    String? resourceURI,
+    String? name,
+    String? role
+  }) = _CreatorSummary;
 
-  CreatorSummary.fromJson(Map<String, dynamic> json){
-    resourceURI = json["resourceURI"];
-    name = json["name"];
-    role = json["role"];
-  }
+  factory CreatorSummary.fromJson(Map<String, Object> json)
+    => _$CreatorSummaryFromJson(json);
 }
