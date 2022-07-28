@@ -4,7 +4,7 @@ import 'package:marvel_app/features/details_screen/details_page.dart';
 class DetailsModule extends Module{
   @override
   List<ModularRoute> get routes => [
-    ChildRoute("/", child: (context, args) => DetailsPage()),
+    ChildRoute("/", child: (context, args) => DetailsPage(comic: args.data), transition: TransitionType.defaultTransition),
   ];
 
 }

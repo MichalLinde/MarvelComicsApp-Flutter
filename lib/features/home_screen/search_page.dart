@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -19,7 +21,10 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   SearchCubit searchCubit = Modular.get<SearchCubit>();
-  
+
+  Timer? _debounce;
+  String? _searchInput;
+
   bool visibleText = false;
   TextEditingController controller = TextEditingController();
 
@@ -37,6 +42,11 @@ class _SearchPageState extends State<SearchPage> {
         });
       }
     });
+  }
+
+  @override void dispose() {
+    _debounce?.cancel();
+    super.dispose();
   }
 
 
@@ -61,7 +71,7 @@ class _SearchPageState extends State<SearchPage> {
           child: TextField(
             textAlignVertical: TextAlignVertical.center,
             controller:controller ,
-            onChanged: (text) => searchBarTextChanged(text),
+            onChanged: (text) => _onSearchChanged(text),
             style: const TextStyle(
               color: CustomColors.darkGrey
             ),
@@ -108,7 +118,7 @@ class _SearchPageState extends State<SearchPage> {
             } else if (state is SearchLoading) {
               return LoadingWidget();
             } else if (state is SearchNotFound) {
-              return _buildNotFoundInfo();
+              return _buildNotFoundInfo(state.search);
             } else if (state is SearchLoaded) {
               return _buildListItems(context, state.comics);
             } else {
@@ -131,7 +141,7 @@ class _SearchPageState extends State<SearchPage> {
         );
       }
     }
-    return _buildNotFoundInfo();
+    return _buildNotFoundInfo(SearchPageStrings.emptyList);
   }
 
 
@@ -157,21 +167,23 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _buildNotFoundInfo(){
+  Widget _buildNotFoundInfo(String searchText){
     return Center(child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Icon(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Icon(
           Icons.close_rounded,
           color: CustomColors.regularGrey,
           size: SearchPageDimens.infoIconSize,
         ),
         Text(
-          SearchPageStrings.notFound,
-          style: TextStyle(
-              color: Colors.black,
-              fontSize: SearchPageDimens.infoTextSize,
-              fontWeight: FontWeight.bold
+          "${SearchPageStrings.notFound1}$searchText${SearchPageStrings.notFound2}",
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: SearchPageDimens.infoTextSize,
+            fontWeight: FontWeight.bold
           ),
         )
       ],
@@ -186,9 +198,22 @@ class _SearchPageState extends State<SearchPage> {
 
   void searchBarTextChanged(String text){
     if (text.isNotEmpty){
+      _searchInput = text;
       searchCubit.searchComics(text);
     } else{
       searchCubit.setInitial();
     }
   }
+
+  _onSearchChanged(String text){
+    if (text != _searchInput) {
+      _searchInput = text;
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
+      _debounce = Timer(const Duration(milliseconds: 500), () {
+        searchBarTextChanged(text);
+      });
+    }
+  }
+
+
 }

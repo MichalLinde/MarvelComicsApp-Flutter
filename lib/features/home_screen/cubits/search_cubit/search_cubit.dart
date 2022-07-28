@@ -12,7 +12,7 @@ class SearchCubit extends Cubit<SearchState>{
       emit(SearchLoading());
       final comics = await comicsRepository.searchComics(searchText);
       if (comics.data?.results?.isEmpty == true){
-        emit(SearchNotFound());
+        emit(SearchNotFound(searchText));
       } else {
         emit(SearchLoaded(comics));
       }
